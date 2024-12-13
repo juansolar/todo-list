@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.background{
+    width: 100vw;
+    height: 100vh;
+    background-color: #e3d5ca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.workspace{
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.workspace__nav{
+    width: 4%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.workspace__main{
+    width: 96%;
+    height: 100%;
+    background-color: #124559;
+    color: white;
+}
+
+.main__todoList{
+    display: none;
+}
