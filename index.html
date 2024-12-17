@@ -20,16 +20,16 @@
                 <div class="main__activities">
                     <h1 class="main__activities-title">Activities</h1>
                     <!-- <div class="main__activities-list"> -->
-                    <div class="main__activities-grid">
+                    <div id="activities" class="main__activities-grid">
                         <div class="main__activities-item">
                             <p class="main__activities-nameitem">Proyecto 1</p>
                         </div>
-                        <div class="main__activities-item main__activities-add">
+                        <div class="main__activities-item main__activities-add" onclick="active_new_project()">
                             <img class="main__activities-image" src="./assets/add.png" alt="add icon">
                         </div>
                     </div>
                     <!-- </div> -->
-                    <!-- add element with Javascript -->
+                    
                 </div>
                 <div class="main__todoList">
                     <h1 class="main__todoList-title">Task List</h1>
@@ -38,5 +38,10 @@
             </main>
         </div>
     </div>
+    <div id="add" class="new_activity">
+        <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project name" autocomplete="off">
+        <button class="new_activity-create" onclick="create_project()">Create</button>
+    </div>
+    <script src="./script.js"></script>
 </body>
 </html>
