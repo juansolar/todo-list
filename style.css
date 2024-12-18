@@ -96,6 +96,33 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: relative;
+}
+
+.main__activities-options{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3vw;
+    height: 3vh;
+    padding: 3%;
+    position: absolute;
+    background-color: white;
+    border-radius: 10%;
+    top: -3vh; left: 50%; transform: translate(-50%, -50%);
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.main__activities-item:hover .main__activities-options{
+    opacity: 1;
+    visibility: visible;
+}
+
+.main__activities-edit, .main__activities-delete{
+    width: 50%;
 }
 
 .main__activities-nameitem{
