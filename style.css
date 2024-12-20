@@ -64,15 +64,11 @@
     color: white;
 }
 
-.main__todoList{
-    display: none;
-}
-
-.main__activities{
+.main__activities, .main__todoList{
     height: 100%;
 }
 
-.main__activities-title{
+.main__activities-title, .main__todoList-title{
     height: 30%;
     display: flex;
     justify-content: center;
@@ -175,4 +171,68 @@
     border: none;
     cursor: pointer;
     font-size: 1.3vw;
+}
+
+
+.main__todoList{
+    display: block;
+    position: relative;
+}
+
+.main__activities{
+    display: none;
+}
+
+.main__todoList-projectName{
+    position: absolute;
+    top: 1vw;
+    right: 1vw;
+    font-size: 2vw;
+}
+
+.main__list-grid{
+    height: 70%;
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(1, 80%);
+    gap: 5%;
+}
+
+.main__list-item{
+    background-color: #219ebc;
+}
+
+.main__list-principal{
+    background-color: #219ebc;
+    height: 8%;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    margin: 2% 5% 0;
+}
+
+.main__list-nameitem{
+    display: flex;
+    align-items: center;
+    font-size: 1.5vw;
+}
+
+.main__list-options{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 2.5vw;
+}
+
+.main__list-edit, .main__list-delete{
+    height: 1vw;
+    cursor: pointer;
+}
+
+.main__list-task{
+    background-color: white;
+    height: 92%;
+    border: 4px solid #219ebc;
 }
