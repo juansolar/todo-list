@@ -36,21 +36,38 @@
                 <div class="main__todoList">
                     <h1 class="main__todoList-title">Task List</h1>
                     <h2 class="main__todoList-projectName">Proyecto 1</h2>
-                    <div id="activities" class="main__list-grid">
-                        <div class="main__list-item">
+                    <img class="main__todoList-back" src="assets/Skip_back.png" alt="icon back" onclick="backActivities()">
+                    <div id="list_task" class="main__list-grid">
+                        <div class="main__list-item"  id="1">
                             <div class="main__list-principal">
                                 <p class="main__list-nameitem">List 1</p>
                                 <div class="main__list-options">
-                                    <img class="main__list-edit" src="./assets/settings_task.png" alt="n">
-                                    <img class="main__list-delete" src="./assets/delete_task.png" alt="n">
+                                    <img class="main__list-edit" src="./assets/settings_task.png" alt="icon setting">
+                                    <img class="main__list-delete" src="./assets/delete_todoList.png" alt="icon delete">
                                 </div>
                             </div>
-                            <div class="main__list-task">
-
+                            <div class="main__list-todo">
+                                <div class="main__list-newTask">
+                                    <input class="main__list-addname" type="text" placeholder="¿What needs to be done?">
+                                    <button class="main__list-addTask" onclick="addTask(this)">Add</button>
+                                </div>
+                                <div class="main__list-details">
+                                    <div class="task">
+                                        <div class="task_details">
+                                            <div class="task_details-state"></div>
+                                            <p class="task_details-name">Tarea 1</p>
+                                        </div>
+                                        <div class="task__options">
+                                            <img class="task__options-edit" src="assets/edit_task.png" alt="icon">
+                                            <img class="task__options-delete" src="assets/delete_task.png" alt="icon">
+                                        </div>
+                                    </div>
+                                    <button class="main__list-completed">Completed</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="main__activities-item main__activities-add" onclick="active_new_project()">
-                            <img class="main__activities-image" src="./assets/add.png" alt="add icon">
+                        <div class="main__list-item main__list-add" onclick="active_new_taskList()">
+                            <img class="main__list-image" src="./assets/add_list.png" alt="add icon">
                         </div>
                     </div>
                 </div>
@@ -58,9 +75,25 @@
         </div>
     </div>
     <!-- frame create project -->
-    <div id="add" class="new_activity">
-        <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project name" autocomplete="off">
-        <button class="new_activity-create" onclick="create_project()">Create</button>
+    <div id="add_activity" class="new_activity">
+        <img class="new_activity-cancel" src="/assets/cancel.png" alt="optional" onclick="cancelNewActivity()">
+        <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project Name" autocomplete="off">
+        <button class="new_activity-create" onclick="create_activity()">Create</button>
+    </div>
+    <!-- frame create list -->
+    <div id="add_list" class="new_list">
+        <img class="new_list-cancel" src="/assets/cancel.png" alt="optional" onclick="cancelNewList()">
+        <input class="name_activiy-input" type="text" name="namelist" id="namelist" placeholder="List Name" autocomplete="off">
+        <div class="new__list-colors">
+            <div class="new__list-color" id="color-purple"></div>
+            <div class="new__list-color" id="color-blue"></div>
+            <div class="new__list-color" id="color-green"></div>
+            <div class="new__list-color" id="color-red"></div>
+            <div class="new__list-color" id="color-yellow"></div>
+            <div class="new__list-color" id="color-orange"></div>
+            <div class="new__list-color" id="color-pink"></div>
+        </div>
+        <button class="new_list-create" onclick="create_list()">Create</button>
     </div>
     <script src="./script.js"></script>
 </body>
