@@ -8,6 +8,8 @@
     --color-yellow: #FBFF00;
     --color-orange: #FFA600;
     --color-pink: #FF00CC;
+    --state-active: #c1121f;
+    --state-closed: #9ef01a;
 }
 
 *{
@@ -182,13 +184,13 @@
 
 /* CAMBIAR PARA PODER VER LAS ACTIVIADES */
 .main__activities{
-    display: none;
+    display: flex;
     flex-direction: column;
 }
 
 /* CAMBIAR PARA VER LAS ACTIVIDADES DE CADA USUARIO */
 .main__todoList{
-    display: flex;
+    display: none;
     flex-direction: column;
     position: relative;
 }
@@ -331,10 +333,18 @@
     width: .5vw;
     height: 1vh;
     border-radius: 50%;
-    background-color: #219ebc;
     margin: 0 3%;
     cursor: pointer;
 }
+
+.task-active{
+    background-color: var(--state-active)
+}
+
+.task-closed{
+    background-color: var(--state-closed);
+}
+
 
 .task__options{
     width: 20%;

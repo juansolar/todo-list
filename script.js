@@ -1,16 +1,46 @@
+//global attributes
+var identificadorLista = 1;
+var global = {};
+var userActivities = [];
+var userList = [];
+var userTaks = [];
+
 function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
     addActivity.style.display = 'flex';
 }
 
+function activities(user){
+    getData().then(() =>{
+        // console.log("información: ",global);
+        global.forEach(element => {
+            if(element.userName == user){
+                userActivities = element.activities;
+                element.activities.forEach(activity => {
+                    create_activity(activity.activityName, activity.idActivity);
+                })
+            }
+        });
+    });
+}
+
+activities("user1");
+
 //Create new activity
-function create_activity(){
+function create_activity(name,id){
+
+    if(id == 0){
+        console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
+    }
+
     const new_project = document.createElement('div');
     new_project.classList.add('main__activities-item');
-
+    new_project.id = id;
+    new_project.setAttribute("onclick",`viewTasks(${id})`);
+    
     //name project
     const new_name_project = document.createElement('p');
-    const name_project = document.getElementById('nameActivity').value;
+    const name_project = name;
     new_name_project.textContent = name_project;
     new_name_project.classList.add('main__activities-nameitem');
 
@@ -50,12 +80,37 @@ function active_new_taskList(){
     addList.style.display = 'flex';
 }
 
+//view lists
+function viewTasks(id){
+    // console.log(userActivities);
+    userActivities.forEach( (activity) =>{
+        if(activity.idActivity == id){
+            userList = activity.lists;
+            activity.lists.forEach( (list) =>{
+                create_list(list.listName, list.idList);
+                //view task each list
+                list.tasks.forEach(task =>{
+                    addTask(task.nameTask, list.idList, task.state,task.idTask);
+                })
+            })
+        }
+    } );
+    const activities = document.querySelector('.main__activities');
+    activities.style.display = 'none';
+    const list_task = document.querySelector('.main__todoList');
+    list_task.style.display = 'flex';
+}
+
 //Create new list
-function create_list(){
-    identificadorLista++;
+function create_list(name, id){
+    
+    if(id == 0){
+        console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
+    }
+
     const new_listTask = document.createElement('div');
     new_listTask.classList.add('main__list-item');
-    new_listTask.id = identificadorLista;
+    new_listTask.id = id;
 
     //title and options list task
     const principal = document.createElement('div');
@@ -63,7 +118,7 @@ function create_list(){
 
     //name list
     const list_name = document.createElement('p');
-    const name_input = document.getElementById('namelist').value;
+    const name_input = name;
     list_name.textContent = name_input;
     list_name.classList.add('main__list-nameitem');
 
@@ -93,11 +148,11 @@ function create_list(){
     input_task.classList.add('main__list-addname');
     input_task.type = 'text';
     input_task.placeholder = '¿What needs to be done?';
+    input_task.id = `task${id}`;
     const button_add = document.createElement('button');
     button_add.classList.add('main__list-addTask');
     button_add.innerHTML = 'Add';
-    button_add.setAttribute('onclick','addTask(this)');
-    console.log("nombre: ", button_add.value);
+    button_add.setAttribute('onclick',`addTask(document.getElementById('task${id}').value,${id},'Active',0)`)
     
     new_task.appendChild(input_task);
     new_task.appendChild(button_add);
@@ -139,17 +194,30 @@ function create_list(){
 
 //back to activitues
 function backActivities(){
+
+    const tasks = document.querySelectorAll('.main__list-item');
+    tasks.forEach(task => {
+        task.remove();
+    })
+
     const activities = document.querySelector('.main__activities');
     activities.style.display = 'flex';
     const list_task = document.querySelector('.main__todoList');
     list_task.style.display = 'none';
 }
 
+function changeState(idTask){
+    const stateNode = document.getElementById(idTask); 
+    stateNode.classList.contains('task-active') 
+        ? (stateNode.classList.remove('task-active'), stateNode.classList.add('task-closed'))
+        : (stateNode.classList.remove('task-closed'), stateNode.classList.add('task-active'));
+}
 
-function addTask(addElement){
+function addTask(nameTask, containerId, stateTask, idTask){
 
-    const container = addElement.closest('div[id]');
-    const containerId = container.id;
+    // idTask asginar un id al crear la tarea
+
+    console.log("El estado es ", idTask);
 
     const task = document.createElement('div');
     task.classList.add('task');
@@ -158,11 +226,18 @@ function addTask(addElement){
     task_details.classList.add('task_details');
     const state = document.createElement('div');
     state.classList.add('task_details-state');
+    state.id = idTask;
+
+    if(stateTask === 'Active')
+        state.classList.add('task-active');
+    else if(stateTask == 'Closed')
+        state.classList.add('task-closed');
+
+    state.setAttribute('onclick', `changeState(${idTask})`)
 
     const name = document.createElement('p');
     name.classList.add('task_details-name');
-    name.textContent = document.getElementById(containerId).querySelector('input').value
-    console.log(name.textContent)
+    name.textContent = nameTask;
 
     task_details.appendChild(state);
     task_details.appendChild(name);
@@ -183,8 +258,6 @@ function addTask(addElement){
     task.appendChild(task_details);
     task.appendChild(options);
 
-    console.log(task)
-
     const granddad = document.getElementById(containerId);
     const dad = granddad.lastElementChild.lastElementChild;
     const brother_node = dad.lastElementChild;
@@ -204,9 +277,21 @@ function cancelNewList(){
     document.getElementById('namelist').value = '';
 }
 
-var identificadorLista = 1;
-
-
+function getData(){
+    return fetch('./testData.json')
+        .then((data=>{
+            if(!data.ok)
+                console.log('Error with request to server');
+            return data.json();
+        })
+    ).then((data) => {
+        // console.log("Data interior: ", data);
+        global = data;
+        return data;
+    }).catch((error) => {
+        console.error('Error: ', error);
+    })
+}
 
 
 

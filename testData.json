@@ -1,0 +1,94 @@
+[
+    {
+        "userName": "user1",
+        "password": "clave1",
+        "activities": [
+            {
+                "activityName": "study",
+                "idActivity": "1001",
+                "lists":[
+                    {
+                        "listName": "homework",
+                        "idList": "9001",
+                        "tasks": [
+                            {
+                                "nameTask": "Mate",
+                                "idTask": "9101",
+                                "state": "Active"
+                            },
+                            {
+                                "nameTask": "English",
+                                "idTask": "9102",
+                                "state": "Closed"                               
+                            }
+                        ]
+                    },
+                    {
+                        "listName": "biology",
+                        "idList": "9002",
+                        "tasks": [
+                            {
+                                "nameTask": "Exam",
+                                "idTask": "9202",
+                                "state": "Active"
+                            }
+                        ]
+                    }
+                ],
+                "color": "blue"
+            },
+            {
+                "activityName" : "sports",
+                "idActivity" : "1002",
+                "lists": [
+                    {
+                        "listName": "soccer",
+                        "idList": "8001",
+                        "tasks": [
+                            {
+                                "nameTask": "Monday",
+                                "idTask": "8101",
+                                "state": "Closed"
+                            },
+                            {
+                                "nameTask": "Tuesday",
+                                "idTask": "8201",
+                                "state": "Active"
+                            }
+                        ]
+                    }
+                ],
+                "color": "orange"
+            }
+        ]
+    },
+    {
+        "userName": "user2",
+        "password": "clave2",
+        "activities": [
+            {
+                "activityName": "work",
+                "idActivity": "2001",
+                "lists": [
+                    {
+                        "listName": "report",
+                        "idList": "7001",
+                        "tasks": [
+                            {
+                                "nameTask": "meetings",
+                                "idTask": "7101",
+                                "state": "Closed"
+                            },
+                            {
+                                "nameTask": "stats",
+                                "idTask": "7201",
+                                "state": "Closed"
+                            }
+                        ]
+                    }
+                ],
+                "color": "pink"
+            }
+        ]
+    }
+]

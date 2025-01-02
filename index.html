@@ -20,13 +20,13 @@
                 <div class="main__activities">
                     <h1 class="main__activities-title">Activities</h1>
                     <div id="activities" class="main__activities-grid">
-                        <div class="main__activities-item">
+                        <!-- <div class="main__activities-item" id="001" onclick="viewTasks(this.id)">
                             <p class="main__activities-nameitem">Proyecto 1</p>
                             <div class="main__activities-options">
                                 <img class="main__activities-edit" src="./assets/edit.png" alt="edit icon">
                                 <img class="main__activities-delete" src="./assets/delete.png" alt="delete icon">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="main__activities-item main__activities-add" onclick="active_new_project()">
                             <img class="main__activities-image" src="./assets/add.png" alt="add icon">
                         </div>
@@ -38,7 +38,7 @@
                     <h2 class="main__todoList-projectName">Proyecto 1</h2>
                     <img class="main__todoList-back" src="assets/Skip_back.png" alt="icon back" onclick="backActivities()">
                     <div id="list_task" class="main__list-grid">
-                        <div class="main__list-item"  id="1">
+                        <!-- <div class="main__list-item"  id="1">
                             <div class="main__list-principal">
                                 <p class="main__list-nameitem">List 1</p>
                                 <div class="main__list-options">
@@ -65,7 +65,7 @@
                                     <button class="main__list-completed">Completed</button>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="main__list-item main__list-add" onclick="active_new_taskList()">
                             <img class="main__list-image" src="./assets/add_list.png" alt="add icon">
                         </div>
@@ -78,7 +78,7 @@
     <div id="add_activity" class="new_activity">
         <img class="new_activity-cancel" src="/assets/cancel.png" alt="optional" onclick="cancelNewActivity()">
         <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project Name" autocomplete="off">
-        <button class="new_activity-create" onclick="create_activity()">Create</button>
+        <button class="new_activity-create" onclick="create_activity(document.getElementById('nameActivity').value,0)">Create</button>
     </div>
     <!-- frame create list -->
     <div id="add_list" class="new_list">
@@ -93,7 +93,7 @@
             <div class="new__list-color" id="color-orange"></div>
             <div class="new__list-color" id="color-pink"></div>
         </div>
-        <button class="new_list-create" onclick="create_list()">Create</button>
+        <button class="new_list-create" onclick="create_list(document.getElementById('namelist').value, 0)">Create</button>
     </div>
     <script src="./script.js"></script>
 </body>
