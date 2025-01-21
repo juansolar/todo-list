@@ -1,13 +1,26 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js';
-import { getStorage } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
+import { getFirestore, collection, getDocs} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-import { firebaseConfig } from './config';
+import { firebaseConfig } from '/config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const database = getFirestore(app);
+
+export async function getDocuments(collectionPath){
+    try{
+        const data = await getDocs(collection(database, collectionPath));
+
+        data.forEach(element => {
+            console.log(`id => ${element.id}`);
+            console.log(element.data());
+        });
+
+    }catch(error){
+        console.error(error)
+    }
+}
+
+// getDocuments("user/eJVIgIPYSemHeshPKwTC/activities/e9E1uKk9hRXs8jwreevP/lists/qHpvhTMJqDD0bAWRKFNX/tasks");
 
 console.log("database conected");

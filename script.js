@@ -1,3 +1,5 @@
+import { getDocuments } from './firebaseconect.js';
+
 //global attributes
 var identificadorLista = 1;
 var global = {};
@@ -10,7 +12,8 @@ function active_new_project(){
     addActivity.style.display = 'flex';
 }
 
-function activities(user){
+async function activities(user){
+    const info = await getDocuments("user/eJVIgIPYSemHeshPKwTC/activities/e9E1uKk9hRXs8jwreevP/lists/qHpvhTMJqDD0bAWRKFNX/tasks");
     getData().then(() =>{
         // console.log("información: ",global);
         global.forEach(element => {
