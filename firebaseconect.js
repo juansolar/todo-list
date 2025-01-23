@@ -11,10 +11,11 @@ export async function getDocuments(collectionPath){
     try{
         const data = await getDocs(collection(database, collectionPath));
 
-        data.forEach(element => {
-            console.log(`id => ${element.id}`);
-            console.log(element.data());
-        });
+        // data.forEach(element => {
+        //     console.log(`id => ${element.id}`);
+        //     console.log(element.data());
+        // });
+        return data;
 
     }catch(error){
         console.error(error)

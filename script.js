@@ -5,32 +5,38 @@ var identificadorLista = 1;
 var global = {};
 var userActivities = [];
 var userList = [];
-var userTaks = [];
 
-function active_new_project(){
+export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
     addActivity.style.display = 'flex';
 }
 
-async function activities(user){
-    const info = await getDocuments("user/eJVIgIPYSemHeshPKwTC/activities/e9E1uKk9hRXs8jwreevP/lists/qHpvhTMJqDD0bAWRKFNX/tasks");
-    getData().then(() =>{
-        // console.log("información: ",global);
-        global.forEach(element => {
-            if(element.userName == user){
-                userActivities = element.activities;
-                element.activities.forEach(activity => {
-                    create_activity(activity.activityName, activity.idActivity);
-                })
-            }
-        });
-    });
+// Test user to use
+const idUser = JSON.parse(localStorage.getItem("loggedUser")).idUser;
+activities(idUser);
+
+export async function activities(user){
+    userActivities = await getDocuments(`user/${user}/activities`);
+
+    userActivities.forEach(element =>{
+        create_activity(element.data().activityName, element.id)
+    })
+
+    // getData().then(() =>{
+    //     // console.log("información: ",global);
+    //     global.forEach(element => {
+    //         if(element.userName == user){
+    //             userActivities = element.activities;
+    //             element.activities.forEach(activity => {
+    //                 create_activity(activity.activityName, activity.idActivity);
+    //             })
+    //         }
+    //     });
+    // });
 }
 
-activities("user1");
-
 //Create new activity
-function create_activity(name,id){
+export function create_activity(name,id){
 
     if(id == 0){
         console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
@@ -39,7 +45,7 @@ function create_activity(name,id){
     const new_project = document.createElement('div');
     new_project.classList.add('main__activities-item');
     new_project.id = id;
-    new_project.setAttribute("onclick",`viewTasks(${id})`);
+    new_project.setAttribute("onclick",`import('./script.js').then(m => m.viewTasks('${id}'))`);
     
     //name project
     const new_name_project = document.createElement('p');
@@ -78,26 +84,28 @@ function create_activity(name,id){
 }
 
 //active new list
-function active_new_taskList(){
+export function active_new_taskList(){
     const addList = document.getElementById('add_list');
     addList.style.display = 'flex';
 }
 
 //view lists
-function viewTasks(id){
-    // console.log(userActivities);
-    userActivities.forEach( (activity) =>{
-        if(activity.idActivity == id){
-            userList = activity.lists;
-            activity.lists.forEach( (list) =>{
-                create_list(list.listName, list.idList);
-                //view task each list
-                list.tasks.forEach(task =>{
-                    addTask(task.nameTask, list.idList, task.state,task.idTask);
+export async function viewTasks(id){
+
+    userActivities.forEach(async element =>{
+        if(element.id == id){
+            //lists
+            userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
+            userList.forEach( async list =>{
+                create_list(list.data().listName, list.id);
+                const userTask = await getDocuments(`user/${idUser}/activities/${element.id}/lists/${list.id}/tasks`);
+                userTask.forEach(task =>{
+                    addTask(task.data().nameTask, list.id, task.data().state, task.id);
                 })
             })
         }
-    } );
+    })
+
     const activities = document.querySelector('.main__activities');
     activities.style.display = 'none';
     const list_task = document.querySelector('.main__todoList');
@@ -105,7 +113,7 @@ function viewTasks(id){
 }
 
 //Create new list
-function create_list(name, id){
+export function create_list(name, id){
     
     if(id == 0){
         console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
@@ -196,7 +204,7 @@ function create_list(name, id){
 }
 
 //back to activitues
-function backActivities(){
+export function backActivities(){
 
     const tasks = document.querySelectorAll('.main__list-item');
     tasks.forEach(task => {
