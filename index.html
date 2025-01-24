@@ -78,7 +78,8 @@
     </div>
     <!-- frame create project -->
     <div id="add_activity" class="new_activity">
-        <img class="new_activity-cancel" src="/assets/cancel.png" alt="optional" onclick="cancelNewActivity()">
+        <img class="new_activity-cancel" src="/assets/cancel.png" alt="optional"
+        onclick="import('./script.js').then(m => m.cancelNewActivity())">
         <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project Name" autocomplete="off">
         <button class="new_activity-create"
             onclick="import('./script.js').then(m => m.create_activity(document.getElementById('nameActivity').value,0))">
@@ -87,7 +88,8 @@
     </div>
     <!-- frame create list -->
     <div id="add_list" class="new_list">
-        <img class="new_list-cancel" src="/assets/cancel.png" alt="optional" onclick="cancelNewList()">
+        <img class="new_list-cancel" src="/assets/cancel.png" alt="optional"
+        onclick="import('./script.js').then(m =>m.cancelNewList())">
         <input class="name_activiy-input" type="text" name="namelist" id="namelist" placeholder="List Name" autocomplete="off">
         <div class="new__list-colors">
             <div class="new__list-color" id="color-purple"></div>

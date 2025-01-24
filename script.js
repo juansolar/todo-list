@@ -1,4 +1,4 @@
-import { getDocuments } from './firebaseconect.js';
+import { getDocuments, addDocumment } from './firebaseconect.js';
 
 //global attributes
 var identificadorLista = 1;
@@ -38,8 +38,11 @@ export async function activities(user){
 //Create new activity
 export function create_activity(name,id){
 
+    //is new id ? 
     if(id == 0){
-        console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
+        addDocumment(`user/${idUser}/activities`, {
+            activityName: name,
+        }).then(docID => {id = docID});
     }
 
     const new_project = document.createElement('div');
@@ -228,7 +231,7 @@ function addTask(nameTask, containerId, stateTask, idTask){
 
     // idTask asginar un id al crear la tarea
 
-    console.log("El estado es ", idTask);
+    console.log("El id de la lista es ", idTask);
 
     const task = document.createElement('div');
     task.classList.add('task');
@@ -276,13 +279,13 @@ function addTask(nameTask, containerId, stateTask, idTask){
     dad.insertBefore(task,brother_node);
 }
 
-function cancelNewActivity(){
+export function cancelNewActivity(){
     const new_activity = document.querySelector('.new_activity');
     new_activity.style.display = 'none';
     document.getElementById('nameActivity').value = '';
 }
 
-function cancelNewList(){
+export function cancelNewList(){
     const new_list = document.querySelector('.new_list');
     new_list.style.display = 'none';
     document.getElementById('namelist').value = '';
