@@ -1,4 +1,4 @@
-import { getDocuments, addDocumment } from './firebaseconect.js';
+import { getDocuments, addDocumment, deleteDocument } from './firebaseconect.js';
 
 //global attributes
 var identificadorLista = 1;
@@ -21,26 +21,14 @@ export async function activities(user){
     userActivities.forEach(element =>{
         create_activity(element.data().activityName, element.id)
     })
-
-    // getData().then(() =>{
-    //     // console.log("información: ",global);
-    //     global.forEach(element => {
-    //         if(element.userName == user){
-    //             userActivities = element.activities;
-    //             element.activities.forEach(activity => {
-    //                 create_activity(activity.activityName, activity.idActivity);
-    //             })
-    //         }
-    //     });
-    // });
 }
 
 //Create new activity
-export function create_activity(name,id){
+export async function create_activity(name,id){
 
     //is new id ? 
     if(id == 0){
-        addDocumment(`user/${idUser}/activities`, {
+        await addDocumment(`user/${idUser}/activities`, {
             activityName: name,
         }).then(docID => {id = docID});
     }
@@ -48,26 +36,28 @@ export function create_activity(name,id){
     const new_project = document.createElement('div');
     new_project.classList.add('main__activities-item');
     new_project.id = id;
-    new_project.setAttribute("onclick",`import('./script.js').then(m => m.viewTasks('${id}'))`);
+    // new_project.setAttribute("onclick",`import('./script.js').then(m => m.viewTasks('${id}'))`);
     
     //name project
     const new_name_project = document.createElement('p');
     const name_project = name;
     new_name_project.textContent = name_project;
     new_name_project.classList.add('main__activities-nameitem');
+    new_name_project.setAttribute("onclick",`import('./script.js').then(m => m.viewTasks('${id}'))`);
 
     //options section
     const options_project = document.createElement('div');
     options_project.classList.add('main__activities-options');
 
     const delete_option = document.createElement('img');
-    delete_option.classList.add('main__activities-edit');
-    delete_option.src = './assets/edit.png';
+    delete_option.classList.add('main__activities-delete');
+    delete_option.src = './assets/delete.png';
+    delete_option.setAttribute("onclick",`import('./script.js').then(m => m.deleteActivity('${id}'))`);
     options_project.appendChild(delete_option);
 
     const edit_option = document.createElement('img');
-    edit_option.classList.add('main__activities-delete');
-    edit_option.src = './assets/delete.png';
+    edit_option.classList.add('main__activities-edit');
+    edit_option.src = './assets/edit.png';
     options_project.appendChild(edit_option);
 
     //add tag to the node
@@ -84,6 +74,19 @@ export function create_activity(name,id){
     const addActivity = document.getElementById('add_activity'); 
     addActivity.style.display = 'none';
     document.getElementById('nameActivity').value = '';
+}
+
+export async function deleteActivity(id){
+    var wasDelete = false;
+    if(confirm("¿Estás seguro de eliminar esta actividad?")){
+        await deleteDocument(`user/${idUser}/activities/`,id).then(flag => wasDelete = flag)
+        if(!wasDelete)
+            alert("¡Ups, ocurrio un error al momento de elimninar la actividad!, intente nuevamente");
+        else
+            location.reload();
+    }
+    else
+        alert("Eliminación cancelada");
 }
 
 //active new list

@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getFirestore, collection, getDocs, addDoc} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 import { firebaseConfig } from '/config.js';
 
@@ -25,8 +25,6 @@ export async function getDocuments(collectionPath){
     }
 }
 
-// getDocuments("user/eJVIgIPYSemHeshPKwTC/activities/e9E1uKk9hRXs8jwreevP/lists/qHpvhTMJqDD0bAWRKFNX/tasks");
-
 //CREATE
 export async function addDocumment(collectionPath, document){
     try {
@@ -38,7 +36,26 @@ export async function addDocumment(collectionPath, document){
     }
 }
 
-// addDocumment('user', {
-//     userName: "Packo",
-//     password: "12345"
-// }).then( id=>{ console.log('El nuevo id del documento es: ', id);});
+//DELETE
+export async function deleteDocument(collectionPath, id){
+    var isDelete = false;
+    try {
+        console.log('path ',collectionPath);
+        const docref = doc(database, collectionPath, id);
+        console.log('la ref es ', docref);
+        await deleteDoc(docref);
+        isDelete=  true;
+    } catch (error) {
+        console.log('Error al eliminar el documento: ', error);
+    }
+    return isDelete;
+}
+
+
+
+
+
+
+
+
+
