@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
-import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, updateDoc} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 import { firebaseConfig } from '/config.js';
 
@@ -38,21 +38,29 @@ export async function addDocumment(collectionPath, document){
 
 //DELETE
 export async function deleteDocument(collectionPath, id){
-    var isDelete = false;
+    var wasDeleted = false;
     try {
-        console.log('path ',collectionPath);
         const docref = doc(database, collectionPath, id);
-        console.log('la ref es ', docref);
         await deleteDoc(docref);
-        isDelete=  true;
+        wasDeleted=  true;
     } catch (error) {
         console.log('Error al eliminar el documento: ', error);
     }
-    return isDelete;
+    return wasDeleted;
 }
 
-
-
+//Update
+export async function updateActivityDB(collectionPath, id, newData){
+    var wasUpdated = false;
+    try {
+        const docRef = doc(database, collectionPath, id);
+        await updateDoc(docRef, newData);
+        wasUpdated = true;
+    } catch (error) {
+        console.log('Error: ', error);
+    }
+    return wasUpdated;
+}
 
 
 

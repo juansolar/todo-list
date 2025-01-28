@@ -1,10 +1,14 @@
-import { getDocuments, addDocumment, deleteDocument } from './firebaseconect.js';
+import { getDocuments, addDocumment, deleteDocument, updateActivityDB} from './firebaseconect.js';
 
 //global attributes
-var identificadorLista = 1;
-var global = {};
 var userActivities = [];
 var userList = [];
+
+//activitys attribtues
+var isUpdateActivity = false;
+const buttonCreateActivity = document.getElementById('create_activity');
+const buttonUpdateActivity = document.getElementById('update_activity');
+var idUpdate = 0;
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
@@ -58,6 +62,7 @@ export async function create_activity(name,id){
     const edit_option = document.createElement('img');
     edit_option.classList.add('main__activities-edit');
     edit_option.src = './assets/edit.png';
+    edit_option.setAttribute('onclick',`import('./script.js').then(m=> m.editActivity('${id}'))`);
     options_project.appendChild(edit_option);
 
     //add tag to the node
@@ -88,6 +93,44 @@ export async function deleteActivity(id){
     else
         alert("Eliminación cancelada");
 }
+
+export function editActivity(id){
+    
+    isUpdateActivity = true;
+    idUpdate = id;
+
+    const activity = document.getElementById(id);
+    const name = activity.querySelector('.main__activities-nameitem').textContent;
+    document.getElementById('nameActivity').value = name;
+
+    buttonCreateActivity.style.display = 'none';
+    buttonUpdateActivity.style.display = 'block';
+
+    active_new_project();
+}
+
+export async function updateActivity(name){
+
+    const wasUpdated = await updateActivityDB(`/user/${idUser}/activities`,idUpdate, {"activityName":name});
+
+    const activity = document.getElementById(idUpdate);
+    activity.querySelector('.main__activities-nameitem').textContent = name;
+
+    if(wasUpdated)
+        alert("Se actulizo el nombre del actividad");
+    else
+        alert("Ups, el nombre de la actividad no se puedo actualizar.");
+
+    // clear attributes
+    const addActivity = document.getElementById('add_activity'); 
+    addActivity.style.display = 'none';
+    buttonCreateActivity.style.display = 'block';
+    buttonUpdateActivity.style.display = 'none';
+    document.getElementById('nameActivity').value = "";
+    isUpdateActivity = false;
+}
+
+
 
 //active new list
 export function active_new_taskList(){

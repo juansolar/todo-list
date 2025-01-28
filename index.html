@@ -81,9 +81,13 @@
         <img class="new_activity-cancel" src="/assets/cancel.png" alt="optional"
         onclick="import('./script.js').then(m => m.cancelNewActivity())">
         <input class="name_activiy-input" type="text" name="nameActivity" id="nameActivity" placeholder="Project Name" autocomplete="off">
-        <button class="new_activity-create"
+        <button class="new_activity-create" id="create_activity"
             onclick="import('./script.js').then(m => m.create_activity(document.getElementById('nameActivity').value,0))">
             Create
+        </button>
+        <button class="new_activity-create" id="update_activity"
+            onclick="import('./script.js').then(m => m.updateActivity(document.getElementById('nameActivity').value))">
+            Update
         </button>
     </div>
     <!-- frame create list -->
