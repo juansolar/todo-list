@@ -4,11 +4,14 @@ import { getDocuments, addDocumment, deleteDocument, updateActivityDB} from './f
 var userActivities = [];
 var userList = [];
 
-//activitys attribtues
+//activitys attributes
 var isUpdateActivity = false;
 const buttonCreateActivity = document.getElementById('create_activity');
 const buttonUpdateActivity = document.getElementById('update_activity');
 var idUpdate = 0;
+
+//tasks attribtues
+var currentActivity = 0;
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
@@ -130,8 +133,6 @@ export async function updateActivity(name){
     isUpdateActivity = false;
 }
 
-
-
 //active new list
 export function active_new_taskList(){
     const addList = document.getElementById('add_list');
@@ -145,6 +146,8 @@ export async function viewTasks(id){
         if(element.id == id){
             //lists
             userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
+            currentActivity = element.id;
+
             userList.forEach( async list =>{
                 create_list(list.data().listName, list.id);
                 const userTask = await getDocuments(`user/${idUser}/activities/${element.id}/lists/${list.id}/tasks`);
@@ -162,10 +165,17 @@ export async function viewTasks(id){
 }
 
 //Create new list
-export function create_list(name, id){
+export async function create_list(name, id){
     
     if(id == 0){
-        console.log("Es nuevo"); //Buscar un nuevo id para agregarle a la actividad y actualizar la variable global de actividades
+        var wasCreated = addDocumment(`user/${idUser}/activities/${currentActivity}/lists`,{
+            'listName': name
+        })
+
+        if(wasCreated)
+            alert("Lista de tareas creada");
+        else
+            alert("¡Ups, no se pudo crear la lista!");
     }
 
     const new_listTask = document.createElement('div');
@@ -274,10 +284,6 @@ function changeState(idTask){
 }
 
 function addTask(nameTask, containerId, stateTask, idTask){
-
-    // idTask asginar un id al crear la tarea
-
-    console.log("El id de la lista es ", idTask);
 
     const task = document.createElement('div');
     task.classList.add('task');
