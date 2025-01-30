@@ -1,17 +1,19 @@
-import { getDocuments, addDocumment, deleteDocument, updateActivityDB} from './firebaseconect.js';
+import { getDocuments, addDocumment, deleteDocument, updateDocument} from './firebaseconect.js';
 
 //global attributes
 var userActivities = [];
 var userList = [];
 
 //activitys attributes
-var isUpdateActivity = false;
 const buttonCreateActivity = document.getElementById('create_activity');
 const buttonUpdateActivity = document.getElementById('update_activity');
-var idUpdate = 0;
+var idActivityUpdate = 0;
 
 //tasks attribtues
 var currentActivity = 0;
+const buttonCreateList = document.getElementById('create_list');
+const buttonUpdateList = document.getElementById('update_list');
+var idListUpdate = 0;
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
@@ -99,8 +101,7 @@ export async function deleteActivity(id){
 
 export function editActivity(id){
     
-    isUpdateActivity = true;
-    idUpdate = id;
+    idActivityUpdate = id;
 
     const activity = document.getElementById(id);
     const name = activity.querySelector('.main__activities-nameitem').textContent;
@@ -114,9 +115,9 @@ export function editActivity(id){
 
 export async function updateActivity(name){
 
-    const wasUpdated = await updateActivityDB(`/user/${idUser}/activities`,idUpdate, {"activityName":name});
+    const wasUpdated = await updateDocument(`/user/${idUser}/activities`,idActivityUpdate, {"activityName":name});
 
-    const activity = document.getElementById(idUpdate);
+    const activity = document.getElementById(idActivityUpdate);
     activity.querySelector('.main__activities-nameitem').textContent = name;
 
     if(wasUpdated)
@@ -130,7 +131,6 @@ export async function updateActivity(name){
     buttonCreateActivity.style.display = 'block';
     buttonUpdateActivity.style.display = 'none';
     document.getElementById('nameActivity').value = "";
-    isUpdateActivity = false;
 }
 
 //active new list
@@ -194,6 +194,7 @@ export async function create_list(name, id){
     const edit_list = document.createElement('img');
     edit_list.classList.add('main__list-edit');
     edit_list.src = './assets/settings_task.png';
+    edit_list.setAttribute('onclick',`import('./script.js').then(m => m.editlist('${id}'))`);
 
     const delete_list = document.createElement('img');
     delete_list.classList.add('main__list-delete');
@@ -257,9 +258,10 @@ export async function create_list(name, id){
    addList.style.display = 'none';
 
     //clear node
-    document.getElementById('namelist').value = '';
+    document.getElementById('listName').value = '';
 }
 
+//Delete list
 export async function deleteList(idList){
     
     const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, idList);
@@ -273,6 +275,42 @@ export async function deleteList(idList){
         alert('¡Ups, la app tuvo problemas al intentar elimnar la tarea! intentalo nuevamente');
 
 }
+
+//Edit list
+export function editlist(id){
+
+    idListUpdate = id;
+
+    const list = document.getElementById(id);
+    const listName = list.querySelector('.main__list-nameitem').textContent;
+    document.getElementById('listName').value = listName;
+
+    buttonCreateList.style.display = 'none';
+    buttonUpdateList.style.display = 'block';
+
+    active_new_taskList();
+}
+
+export async function updateList(listName) {
+
+    const wasUpdated = await updateDocument(`/user/${idUser}/activities/${currentActivity}/lists`,idListUpdate, {"listName": listName});
+
+    const list = document.getElementById(idListUpdate);
+    list.querySelector('.main__list-nameitem').textContent = listName;
+
+    if(wasUpdated)
+        alert("Se actualizó el nombre de la lista")
+    else
+        alert("Ups, el nombre de la lista no se puedo actualizar.");
+        
+    // clear attributes
+    const addList = document.getElementById('add_list');
+    addList.style.display = 'none';
+    buttonCreateList.style.display = 'block';
+    buttonUpdateList.style.display = 'none';
+    document.getElementById('listName').value = "";
+}
+
 
 //back to activitues
 export function backActivities(){
@@ -347,12 +385,19 @@ export function cancelNewActivity(){
     const new_activity = document.querySelector('.new_activity');
     new_activity.style.display = 'none';
     document.getElementById('nameActivity').value = '';
+
+    buttonCreateActivity.style.display = 'block';
+    buttonUpdateActivity.style.display = 'none';
+
 }
 
 export function cancelNewList(){
     const new_list = document.querySelector('.new_list');
     new_list.style.display = 'none';
-    document.getElementById('namelist').value = '';
+    document.getElementById('listName').value = '';
+
+    buttonCreateList.style.display = 'block';
+    buttonUpdateList.style.display = 'none';
 }
 
 function getData(){

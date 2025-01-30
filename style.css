@@ -192,6 +192,10 @@
     display: none;
 }
 
+#update_list{
+    display: none;
+}
+
 /* CAMBIAR PARA PODER VER LAS ACTIVIADES */
 .main__activities{
     display: flex;

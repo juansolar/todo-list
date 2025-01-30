@@ -50,7 +50,7 @@ export async function deleteDocument(collectionPath, id){
 }
 
 //Update
-export async function updateActivityDB(collectionPath, id, newData){
+export async function updateDocument(collectionPath, id, newData){
     var wasUpdated = false;
     try {
         const docRef = doc(database, collectionPath, id);

@@ -94,7 +94,7 @@
     <div id="add_list" class="new_list">
         <img class="new_list-cancel" src="/assets/cancel.png" alt="optional"
         onclick="import('./script.js').then(m =>m.cancelNewList())">
-        <input class="name_activiy-input" type="text" name="namelist" id="namelist" placeholder="List Name" autocomplete="off" required>
+        <input class="name_activiy-input" type="text" name="listName" id="listName" placeholder="List Name" autocomplete="off" required>
         <div class="new__list-colors">
             <div class="new__list-color" id="color-purple"></div>
             <div class="new__list-color" id="color-blue"></div>
@@ -104,9 +104,13 @@
             <div class="new__list-color" id="color-orange"></div>
             <div class="new__list-color" id="color-pink"></div>
         </div>
-        <button class="new_list-create"
-            onclick="import('./script.js').then(m => m.create_list(document.getElementById('namelist').value, 0))">
+        <button class="new_list-create" id="create_list"
+            onclick="import('./script.js').then(m => m.create_list(document.getElementById('listName').value, 0))">
             Create
+        </button>
+        <button class="new_list-create" id="update_list"
+            onclick="import('./script.js').then(m => m.updateList(document.getElementById('listName').value))">
+            Update
         </button>
     </div>
     <script type="module" src="./script.js"></script>
