@@ -168,14 +168,9 @@ export async function viewTasks(id){
 export async function create_list(name, id){
     
     if(id == 0){
-        var wasCreated = addDocumment(`user/${idUser}/activities/${currentActivity}/lists`,{
+        await addDocumment(`user/${idUser}/activities/${currentActivity}/lists`,{
             'listName': name
-        })
-
-        if(wasCreated)
-            alert("Lista de tareas creada");
-        else
-            alert("¡Ups, no se pudo crear la lista!");
+        }).then(docID => id = docID);
     }
 
     const new_listTask = document.createElement('div');
@@ -195,12 +190,15 @@ export async function create_list(name, id){
     //options list
     const list_options = document.createElement('div');
     list_options.classList.add('main__list-options');
+    
     const edit_list = document.createElement('img');
     edit_list.classList.add('main__list-edit');
     edit_list.src = './assets/settings_task.png';
+
     const delete_list = document.createElement('img');
     delete_list.classList.add('main__list-delete');
     delete_list.src = './assets/delete_todoList.png';
+    delete_list.setAttribute('onclick',`import('./script.js').then(m=>m.deleteList('${id}'))`)
 
     list_options.appendChild(edit_list);
     list_options.appendChild(delete_list);
@@ -260,6 +258,20 @@ export async function create_list(name, id){
 
     //clear node
     document.getElementById('namelist').value = '';
+}
+
+export async function deleteList(idList){
+    
+    const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, idList);
+
+    if(wasDeleted){
+        //Because the app uses an script html, it need to update the task list
+        const taskList = document.querySelectorAll('.main__list-item');
+        taskList.forEach(element => element.remove() );
+        viewTasks(currentActivity);
+    }else
+        alert('¡Ups, la app tuvo problemas al intentar elimnar la tarea! intentalo nuevamente');
+
 }
 
 //back to activitues
