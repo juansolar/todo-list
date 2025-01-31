@@ -218,10 +218,12 @@ export async function create_list(name, id){
     input_task.type = 'text';
     input_task.placeholder = '¿What needs to be done?';
     input_task.id = `task${id}`;
+    input_task.autocomplete = 'off'
     const button_add = document.createElement('button');
     button_add.classList.add('main__list-addTask');
     button_add.innerHTML = 'Add';
-    button_add.setAttribute('onclick',`addTask(document.getElementById('task${id}').value,${id},'Active',0)`)
+    button_add.setAttribute('onclick',`import('./script.js')
+        .then(m => m.addTask(document.getElementById('task${id}').value, '${id}', 'Active', 0))`);
     
     new_task.appendChild(input_task);
     new_task.appendChild(button_add);
@@ -291,6 +293,7 @@ export function editlist(id){
     active_new_taskList();
 }
 
+//Update list
 export async function updateList(listName) {
 
     const wasUpdated = await updateDocument(`/user/${idUser}/activities/${currentActivity}/lists`,idListUpdate, {"listName": listName});
@@ -333,7 +336,14 @@ function changeState(idTask){
         : (stateNode.classList.remove('task-closed'), stateNode.classList.add('task-active'));
 }
 
-function addTask(nameTask, containerId, stateTask, idTask){
+export async function addTask(nameTask, listId, stateTask, idTask){
+
+    if(idTask == '0'){
+        await addDocumment(`user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`, {
+            "nameTask": nameTask,
+            "state": stateTask
+        }).then(docID => idTask = docID)
+    }
 
     const task = document.createElement('div');
     task.classList.add('task');
@@ -374,7 +384,7 @@ function addTask(nameTask, containerId, stateTask, idTask){
     task.appendChild(task_details);
     task.appendChild(options);
 
-    const granddad = document.getElementById(containerId);
+    const granddad = document.getElementById(listId);
     const dad = granddad.lastElementChild.lastElementChild;
     const brother_node = dad.lastElementChild;
 
