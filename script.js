@@ -9,11 +9,13 @@ const buttonCreateActivity = document.getElementById('create_activity');
 const buttonUpdateActivity = document.getElementById('update_activity');
 var idActivityUpdate = 0;
 
-//tasks attribtues
+//list attributes
 var currentActivity = 0;
 const buttonCreateList = document.getElementById('create_list');
 const buttonUpdateList = document.getElementById('update_list');
 var idListUpdate = 0;
+
+//task attributes
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
@@ -270,9 +272,8 @@ export async function deleteList(idList){
 
     if(wasDeleted){
         //Because the app uses an script html, it need to update the task list
-        const taskList = document.querySelectorAll('.main__list-item');
-        taskList.forEach(element => element.remove() );
-        viewTasks(currentActivity);
+        alert("La tarea fue eliminada");
+        refreshDoc('.main__list-item');
     }else
         alert('¡Ups, la app tuvo problemas al intentar elimnar la tarea! intentalo nuevamente');
 
@@ -329,20 +330,21 @@ export function backActivities(){
     list_task.style.display = 'none';
 }
 
-function changeState(idTask){
-    const stateNode = document.getElementById(idTask); 
+function changeState(taskId){
+    const stateNode = document.getElementById(taskId); 
     stateNode.classList.contains('task-active') 
         ? (stateNode.classList.remove('task-active'), stateNode.classList.add('task-closed'))
         : (stateNode.classList.remove('task-closed'), stateNode.classList.add('task-active'));
 }
 
-export async function addTask(nameTask, listId, stateTask, idTask){
+// Create Task
+export async function addTask(nameTask, listId, stateTask, taskId){
 
-    if(idTask == '0'){
+    if(taskId == '0'){
         await addDocumment(`user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`, {
             "nameTask": nameTask,
             "state": stateTask
-        }).then(docID => idTask = docID)
+        }).then(docID => taskId = docID)
     }
 
     const task = document.createElement('div');
@@ -352,14 +354,14 @@ export async function addTask(nameTask, listId, stateTask, idTask){
     task_details.classList.add('task_details');
     const state = document.createElement('div');
     state.classList.add('task_details-state');
-    state.id = idTask;
+    state.id = taskId;
 
     if(stateTask === 'Active')
         state.classList.add('task-active');
     else if(stateTask == 'Closed')
         state.classList.add('task-closed');
 
-    state.setAttribute('onclick', `changeState(${idTask})`)
+    state.setAttribute('onclick', `changeState(${taskId})`)
 
     const name = document.createElement('p');
     name.classList.add('task_details-name');
@@ -370,14 +372,18 @@ export async function addTask(nameTask, listId, stateTask, idTask){
     
     const options = document.createElement('div');
     options.classList.add('task__options');
+
     const edit = document.createElement('img');
     edit.classList.add('task__options-edit');
     edit.src = 'assets/edit_task.png';
     edit.alt = 'icon edit';
+
     const deleteTask = document.createElement('img');
     deleteTask.classList.add('task__options-delete');
     deleteTask.src = 'assets/delete_task.png';
     deleteTask.alt = 'icon delete';
+    deleteTask.setAttribute('onclick', `import('./script.js').then(m => m.deleteTask('${taskId}','${listId}'))`);
+
     options.appendChild(edit);
     options.appendChild(deleteTask);
 
@@ -389,6 +395,27 @@ export async function addTask(nameTask, listId, stateTask, idTask){
     const brother_node = dad.lastElementChild;
 
     dad.insertBefore(task,brother_node);
+}
+
+// Delete Task
+export async function deleteTask(taskId, listId){
+
+    if(confirm('¿Está seguro de eliminar esta tarea?')){
+        const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`, taskId);
+        if(wasDeleted){
+            alert("La tarea fue eliminada");
+            refreshDoc('.main__list-item');
+        }else
+            alert("¡Ups, ocurrio un error en la eliminación! intente nuevamente");
+    }else
+        alert("Elimación cancelada");
+    
+}
+
+function refreshDoc(className){
+    const taskList = document.querySelectorAll(className);
+    taskList.forEach(element => element.remove() );
+    viewTasks(currentActivity);
 }
 
 export function cancelNewActivity(){
