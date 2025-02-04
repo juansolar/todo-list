@@ -333,13 +333,6 @@ export function backActivities(){
     list_task.style.display = 'none';
 }
 
-function changeState(taskId){
-    const stateNode = document.getElementById(taskId); 
-    stateNode.classList.contains('task-active') 
-        ? (stateNode.classList.remove('task-active'), stateNode.classList.add('task-closed'))
-        : (stateNode.classList.remove('task-closed'), stateNode.classList.add('task-active'));
-}
-
 // Create Task
 export async function addTask(nameTask, listId, stateTask, taskId){
 
@@ -358,14 +351,14 @@ export async function addTask(nameTask, listId, stateTask, taskId){
     task_details.classList.add('task_details');
     const state = document.createElement('div');
     state.classList.add('task_details-state');
-    // state.id = taskId;
 
     if(stateTask === 'Active')
         state.classList.add('task-active');
     else if(stateTask == 'Closed')
         state.classList.add('task-closed');
 
-    state.setAttribute('onclick', `changeState(${taskId})`)
+    state.setAttribute('onclick', `import('./script.js').then(m => m.changeState('${taskId}','${listId}'))`);
+
 
     const name = document.createElement('p');
     name.classList.add('task_details-name');
@@ -417,6 +410,27 @@ export async function deleteTask(taskId, listId){
     
 }
 
+export async function changeState(taskId, listId){
+
+    const task = document.getElementById(taskId);
+    const stateNode = task.querySelector('.task_details-state');
+    const taskState = stateNode.classList.contains('task-active') ? 'Active' : 'Closed';
+
+    const wasUpdated = await updateDocument(
+        `user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`,
+        taskId,
+        {"state": taskState == 'Active' ? 'Closed' : 'Active'}
+    );
+
+    if(!wasUpdated){
+        alert("¡Ups, ocurrio una problema la intentar cambiar el estado! intente nuevamente")
+    }else{
+        taskState == 'Active' 
+        ? (stateNode.classList.remove('task-active'), stateNode.classList.add('task-closed'))
+        : (stateNode.classList.remove('task-closed'), stateNode.classList.add('task-active'));
+    }
+}
+
 export function editTask(taskId, listId){
     
     const task = document.getElementById(taskId);
@@ -429,9 +443,6 @@ export function editTask(taskId, listId){
 }
 
 export async function updateTask(taskName) {
-
-    console.log(`id: `);
-    console.log(`newData: `);
 
     const wasUpdated = await updateDocument(
         `user/${idUser}/activities/${currentActivity}/lists/${currentList}/tasks`,
