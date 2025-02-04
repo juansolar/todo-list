@@ -91,14 +91,14 @@ export async function create_activity(name,id){
     document.getElementById('nameActivity').value = '';
 }
 
-export async function deleteActivity(id){
+export async function deleteActivity(ActivityId){
     var wasDelete = false;
     if(confirm("¿Estás seguro de eliminar esta actividad?")){
-        await deleteDocument(`user/${idUser}/activities/`,id).then(flag => wasDelete = flag)
+        await deleteDocument(`user/${idUser}/activities/`,ActivityId).then(flag => wasDelete = flag)
         if(!wasDelete)
             alert("¡Ups, ocurrio un error al momento de elimninar la actividad!, intente nuevamente");
         else
-            location.reload();
+            document.getElementById(ActivityId).remove();
     }
     else
         alert("Eliminación cancelada");
@@ -269,15 +269,13 @@ export async function create_list(name, id){
 }
 
 //Delete list
-export async function deleteList(idList){
+export async function deleteList(listId){
     
-    const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, idList);
+    const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, listId);
 
-    if(wasDeleted){
-        //Because the app uses an script html, it need to update the task list
-        alert("La tarea fue eliminada");
-        refreshDoc('.main__list-item');
-    }else
+    if(wasDeleted)
+        document.getElementById(listId).remove();
+    else
         alert('¡Ups, la app tuvo problemas al intentar elimnar la tarea! intentalo nuevamente');
 
 }
@@ -400,10 +398,9 @@ export async function deleteTask(taskId, listId){
 
     if(confirm('¿Está seguro de eliminar esta tarea?')){
         const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`, taskId);
-        if(wasDeleted){
-            alert("La tarea fue eliminada");
-            refreshDoc('.main__list-item');
-        }else
+        if(wasDeleted)
+            document.getElementById(taskId).remove();
+        else
             alert("¡Ups, ocurrio un error en la eliminación! intente nuevamente");
     }else
         alert("Elimación cancelada");
@@ -463,12 +460,6 @@ export async function updateTask(taskName) {
 
 export function cancelUpdateTask(){
     document.getElementById('edit_task').style.display = 'none';
-}
-
-function refreshDoc(className){
-    const taskList = document.querySelectorAll(className);
-    taskList.forEach(element => element.remove() );
-    viewTasks(currentActivity);
 }
 
 export function cancelNewActivity(){
