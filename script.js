@@ -16,6 +16,9 @@ const buttonUpdateList = document.getElementById('update_list');
 var idListUpdate = 0;
 
 //task attributes
+var TaskIdUpdate = 0;
+var currentList = 0;
+
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
@@ -349,12 +352,13 @@ export async function addTask(nameTask, listId, stateTask, taskId){
 
     const task = document.createElement('div');
     task.classList.add('task');
+    task.id = taskId;
 
     const task_details = document.createElement('div');
     task_details.classList.add('task_details');
     const state = document.createElement('div');
     state.classList.add('task_details-state');
-    state.id = taskId;
+    // state.id = taskId;
 
     if(stateTask === 'Active')
         state.classList.add('task-active');
@@ -377,6 +381,7 @@ export async function addTask(nameTask, listId, stateTask, taskId){
     edit.classList.add('task__options-edit');
     edit.src = 'assets/edit_task.png';
     edit.alt = 'icon edit';
+    edit.setAttribute('onclick',`import('./script.js').then(m => m.editTask('${taskId}','${listId}'))`);
 
     const deleteTask = document.createElement('img');
     deleteTask.classList.add('task__options-delete');
@@ -410,6 +415,43 @@ export async function deleteTask(taskId, listId){
     }else
         alert("Elimación cancelada");
     
+}
+
+export function editTask(taskId, listId){
+    
+    const task = document.getElementById(taskId);
+    const name = task.querySelector('.task_details-name').textContent;
+    document.getElementById('taskName').value = name;
+    TaskIdUpdate = taskId;
+    currentList = listId;
+
+    document.getElementById('edit_task').style.display = 'flex';
+}
+
+export async function updateTask(taskName) {
+
+    console.log(`id: `);
+    console.log(`newData: `);
+
+    const wasUpdated = await updateDocument(
+        `user/${idUser}/activities/${currentActivity}/lists/${currentList}/tasks`,
+        TaskIdUpdate,
+        {"nameTask": taskName}
+    );
+
+    if(wasUpdated)
+        alert("El nombre fue actualizado correctamente")
+    else
+    alert("Ups, el nombre de la tarea no se puedo actualizar.");
+
+    document.getElementById(TaskIdUpdate).querySelector('.task_details-name').textContent = taskName;
+    document.getElementById('edit_task').style.display = 'none';
+
+    // const wasUpdated = await updateDocument(`user/${idUser}/activities/${currentActivity}/lists/${}`);
+}
+
+export function cancelUpdateTask(){
+    document.getElementById('edit_task').style.display = 'none';
 }
 
 function refreshDoc(className){

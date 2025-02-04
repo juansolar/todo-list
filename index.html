@@ -113,6 +113,17 @@
             Update
         </button>
     </div>
+
+    <div class="edit__taskName" id="edit_task">
+        <img class="new_list-cancel" src="/assets/cancel.png" alt="optional"
+        onclick="import('./script.js').then(m =>m.cancelUpdateTask())">
+        <input class="edit__taskName-input" type="text" name="taskName" placeholder="Task Name" id="taskName" autocomplete="off" required>
+        <button class="edit__taskName-update"
+            onclick="import('./script.js').then(m => m.updateTask(document.getElementById('taskName').value))">
+            Update
+        </button>
+    </div>
+
     <script type="module" src="./script.js"></script>
     <script type="module" src="./firebaseconect.js"></script>
 </body>
