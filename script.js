@@ -153,6 +153,11 @@ export async function viewTasks(id){
             userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
             currentActivity = element.id;
 
+            //The activity name is added to the task list screen
+            document.querySelector('.main__todoList-projectName').textContent = 
+                document.getElementById(id).querySelector('.main__activities-nameitem').textContent;
+            
+
             userList.forEach( async list =>{
                 create_list(list.data().listName, list.id);
                 const userTask = await getDocuments(`user/${idUser}/activities/${element.id}/lists/${list.id}/tasks`);
