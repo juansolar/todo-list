@@ -251,6 +251,7 @@ export async function create_list(name, id){
     const list_completed = document.createElement('button');
     list_completed.classList.add('main__list-completed');
     list_completed.innerHTML = 'Completed';
+    list_completed.setAttribute('onclick',`import('./script.js').then(m => m.completed('${id}'))`);
 
     // list_details.appendChild(task);
     list_details.appendChild(list_completed);
@@ -273,6 +274,30 @@ export async function create_list(name, id){
     document.getElementById('listName').value = '';
 }
 
+export async function completed(listId){
+
+    var isCompleted = true;
+    const tasks = await getDocuments(`user/${idUser}/activities/${currentActivity}/lists/${listId}/tasks`);
+
+    tasks.forEach(task =>{
+        if(task.data().state == 'Active')
+            isCompleted = false;
+    });
+
+    if(!isCompleted){
+        alert("No se puede completar la lista ya que existen tareas pendiente aún");
+    }else{
+        const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, listId);
+
+        if(wasDeleted){
+            document.getElementById(listId).remove();
+            alert("Felicitaciones, la lista de tareas fue completada");
+        }else
+            alert('¡Ups, la app tuvo problemas al intentar completar la lista! intentalo nuevamente');
+    }
+}
+
+
 //Delete list
 export async function deleteList(listId){
     
@@ -281,7 +306,7 @@ export async function deleteList(listId){
     if(wasDeleted)
         document.getElementById(listId).remove();
     else
-        alert('¡Ups, la app tuvo problemas al intentar elimnar la tarea! intentalo nuevamente');
+        alert('¡Ups, la app tuvo problemas al intentar eliminar la tarea! intentalo nuevamente');
 
 }
 
