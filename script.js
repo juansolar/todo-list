@@ -47,6 +47,8 @@ export async function create_activity(name,id){
         }).then(docID => {id = docID});
     }
 
+    await canAddActivity();
+
     const new_project = document.createElement('div');
     new_project.classList.add('main__activities-item');
     new_project.id = id;
@@ -102,6 +104,8 @@ export async function deleteActivity(ActivityId){
     }
     else
         alert("Eliminación cancelada");
+
+    canAddActivity();
 }
 
 export function editActivity(id){
@@ -138,6 +142,17 @@ export async function updateActivity(name){
     document.getElementById('nameActivity').value = "";
 }
 
+export async function canAddActivity(){
+
+    const activitiesList = await getDocuments(`user/${idUser}/activities`);
+    var answer = activitiesList.size > 9 ? false : true;
+
+    if(answer)
+        document.querySelector('.main__activities-add').style.display = 'flex';
+    else
+        document.querySelector('.main__activities-add').style.display = 'none';
+}
+
 //active new list
 export function active_new_taskList(){
     const addList = document.getElementById('add_list');
@@ -149,15 +164,15 @@ export async function viewTasks(id){
 
     userActivities.forEach(async element =>{
         if(element.id == id){
-            //lists
-            userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
-            currentActivity = element.id;
 
             //The activity name is added to the task list screen
             document.querySelector('.main__todoList-projectName').textContent = 
-                document.getElementById(id).querySelector('.main__activities-nameitem').textContent;
-            
+            document.getElementById(id).querySelector('.main__activities-nameitem').textContent;
 
+            //lists
+            userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
+            currentActivity = element.id;
+            
             userList.forEach( async list =>{
                 create_list(list.data().listName, list.id);
                 const userTask = await getDocuments(`user/${idUser}/activities/${element.id}/lists/${list.id}/tasks`);
@@ -182,6 +197,8 @@ export async function create_list(name, id){
             'listName': name
         }).then(docID => id = docID);
     }
+
+    await canAddList();
 
     const new_listTask = document.createElement('div');
     new_listTask.classList.add('main__list-item');
@@ -303,8 +320,10 @@ export async function deleteList(listId){
     
     const wasDeleted = await deleteDocument(`user/${idUser}/activities/${currentActivity}/lists`, listId);
 
-    if(wasDeleted)
+    if(wasDeleted){
+        canAddList();
         document.getElementById(listId).remove();
+    }
     else
         alert('¡Ups, la app tuvo problemas al intentar eliminar la tarea! intentalo nuevamente');
 
@@ -346,6 +365,17 @@ export async function updateList(listName) {
     document.getElementById('listName').value = "";
 }
 
+export async function canAddList(){
+    
+    const taskList = await getDocuments(`user/${idUser}/activities/${currentActivity}/lists`);
+
+    var answer = taskList.size > 3 ? false : true;
+
+    if(answer)
+        document.querySelector('.main__list-add').style.display = 'flex';
+    else
+        document.querySelector('.main__list-add').style.display = 'none';
+}
 
 //back to activitues
 export function backActivities(){
