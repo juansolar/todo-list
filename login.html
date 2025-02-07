@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <button onclick="import('./login.js').then(m => m.access())">Acceder a la lista de tareas</button>
+    <div class="auth__container">
+        <h1 class="auth__container-title">Daily Dares</h1>
+        <input type="text" class="auth__container-input" id="username" name="username" placeholder="Username" required autocomplete="off">
+        <input type="password" class="auth__container-input" id="password" name="password" placeholder="Password" required autocapitalize="off">
+        <div class="auth__actions">
+            <button class="auth__actions-button" onclick="import('./login.js').then(m => m.access())">
+                Login
+            </button>
+            <button class="auth__actions-button">
+                Register
+            </button>
+        </div>
+    </div>
 </body>
 </html>
