@@ -1,6 +1,6 @@
 :root{
     --activity: #219ebc;
-    --background: #e3d5ca;
+    --background: #fffae5, #fff2b2, #ffe14c;
     --color-purple: #870299;
     --color-blue: #2F00FF;
     --color-green: #00FF6F;
@@ -20,7 +20,7 @@
 .background{
     width: 100vw;
     height: 100vh;
-    background-color: var(--background);
+    background: linear-gradient(var(--background));
     display: flex;
     align-items: center;
     justify-content: center;

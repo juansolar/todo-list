@@ -451,6 +451,10 @@ export async function addTask(nameTask, listId, stateTask, taskId){
     const brother_node = dad.lastElementChild;
 
     dad.insertBefore(task,brother_node);
+
+    // document.getElementById('')
+
+    document.getElementById(`task${listId}`).value = "";
 }
 
 // Delete Task
