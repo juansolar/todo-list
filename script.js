@@ -19,15 +19,13 @@ var idListUpdate = 0;
 var TaskIdUpdate = 0;
 var currentList = 0;
 
+// validateSession();
+var idUser = 0;
 
 export function active_new_project(){
     const addActivity = document.getElementById('add_activity'); 
     addActivity.style.display = 'flex';
 }
-
-// Test user to use
-const idUser = JSON.parse(localStorage.getItem("loggedUser")).idUser;
-activities(idUser);
 
 export async function activities(user){
     userActivities = await getDocuments(`user/${user}/activities`);
@@ -568,9 +566,28 @@ function getData(){
     })
 }
 
+// function validateSession(){
+//     if(localStorage.getItem('loggedUser')){
+//         idUser = JSON.parse(localStorage.getItem("loggedUser")).idUser;
+//         activities(idUser);
+//     }
+//     else{
+//         window.location.href = './login.html';
+//         alert('¡Debes iniciar sesión primero!');
+//     }
+// }
 
-
-
+document.addEventListener('DOMContentLoaded', () => {
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (loggedUser) {
+        idUser = JSON.parse(loggedUser).idUser;
+        console.log('el id es: ', idUser);
+        activities(idUser);
+    } else {
+        alert('Debes iniciar sesión primero');
+        window.location.href = './login.html';
+    }
+});
 
 
 

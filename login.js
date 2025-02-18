@@ -1,5 +1,7 @@
 import { getDocuments } from "./firebaseconect.js";
-import { activities } from "./script.js";
+// import { activities } from "./script.js";
+
+validateSession();
 
 async function login(username, password){
     const users = await getDocuments('user');
@@ -12,8 +14,6 @@ async function login(username, password){
     });
 
     if(idUser != undefined){
-        console.log(idUser)
-        activities(idUser);
         localStorage.setItem("loggedUser", JSON.stringify({ idUser }));
         window.location.href = './index.html';
     }else
@@ -22,11 +22,18 @@ async function login(username, password){
 }
 
 export function access(){
-
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    console.log(`Se ingreso el usuario ${username} con la constraseña ${password}`);
+    // console.log(`Se ingreso el usuario ${username} con la constraseña ${password}`);
 
     login(username, password);
+    console.log('hola');
+}
+
+function validateSession(){
+    console.log('entro a validar');
+    if(localStorage.getItem('loggedUser')){
+        window.location.href = './index.html';
+    }
 }
