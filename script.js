@@ -160,16 +160,16 @@ export function active_new_taskList(){
 //view lists
 export async function viewTasks(id){
 
+    currentActivity = id;
+
     userActivities.forEach(async element =>{
         if(element.id == id){
-
             //The activity name is added to the task list screen
             document.querySelector('.main__todoList-projectName').textContent = 
             document.getElementById(id).querySelector('.main__activities-nameitem').textContent;
 
             //lists
             userList = await getDocuments(`user/${idUser}/activities/${element.id}/lists`);
-            currentActivity = element.id;
             
             userList.forEach( async list =>{
                 create_list(list.data().listName, list.id);
@@ -581,7 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loggedUser = localStorage.getItem("loggedUser");
     if (loggedUser) {
         idUser = JSON.parse(loggedUser).idUser;
-        console.log('el id es: ', idUser);
         activities(idUser);
     } else {
         alert('Debes iniciar sesión primero');
