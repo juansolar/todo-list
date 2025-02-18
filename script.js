@@ -545,6 +545,13 @@ export function cancelNewList(){
     buttonUpdateList.style.display = 'none';
 }
 
+export function logout(){
+    if(confirm('¿Seguro deseas cerrar la sesión?')){
+        localStorage.removeItem("loggedUser");
+        window.location.href = './login.html';
+    }
+}
+
 function getData(){
     return fetch('./testData.json')
         .then((data=>{
